@@ -1,18 +1,10 @@
 package org.amoseman.securemessageservice.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.util.Scanner;
 
-public class Client implements Runnable {
+public class Client {
     private final String SERVER_ADDRESS;
     private final int SERVER_PORT;
-    private Socket socket;
-    private PrintWriter printWriter;
-    private BufferedReader bufferedReader;
-    private boolean running;
 
     public Client(String serverAddress, int serverPort) {
         this.SERVER_ADDRESS = serverAddress;
@@ -20,36 +12,17 @@ public class Client implements Runnable {
     }
 
     public void run() {
-        try {
-            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            printWriter = new PrintWriter(socket.getOutputStream(), true);
-            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        running = true;
-        while (running) {
-            try {
-                String line = bufferedReader.readLine();
-                System.out.println(line);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        SocketHandler socketHandler =  new SocketHandler(SERVER_ADDRESS, SERVER_PORT);
+        Thread thread = new Thread(socketHandler);
+        thread.start();
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if (line.equalsIgnoreCase("QUIT")) {
+                break;
             }
-        }
-    }
-
-    public void sendMessage(String message) {
-        printWriter.println(message);
-    }
-
-    public void quit() {
-        running = false;
-        try {
-            bufferedReader.close();
-            printWriter.close();
-            socket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            socketHandler.sendMessage(line);
         }
     }
 }
