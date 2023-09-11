@@ -26,7 +26,6 @@ public class Server extends Application {
     public void run() {
         System.out.println("Starting server on port " + port + "...");
         clientSocketHandlers = Collections.synchronizedList(new ArrayList<>());
-
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -40,12 +39,16 @@ public class Server extends Application {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            ClientSocketHandler clientSocketHandler = new ClientSocketHandler(clientSocket, clientSocketHandlers);
-            clientSocketHandlers.add(clientSocketHandler);
-            Thread thread = new Thread(clientSocketHandler);
-            thread.start();
-            System.out.println("Client at " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + " has connected.");
+            onClientConnect(clientSocket);
         }
+    }
+
+    private void onClientConnect(Socket clientSocket) {
+        ClientSocketHandler clientSocketHandler = new ClientSocketHandler(clientSocket, clientSocketHandlers, PGP_KEY_PAIR, CRYPTOGRAPHY);
+        clientSocketHandlers.add(clientSocketHandler);
+        Thread thread = new Thread(clientSocketHandler);
+        thread.start();
+        System.out.println("Client at " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + " has connected.");
     }
 
     public void quit() {

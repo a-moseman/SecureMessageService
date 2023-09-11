@@ -4,12 +4,12 @@ import org.amoseman.securemessageservice.core.cryptography.Cryptography;
 import org.bouncycastle.openpgp.PGPKeyPair;
 
 public class Application {
-    public Cryptography cryptography;
+    public final Cryptography CRYPTOGRAPHY;
     public final PGPKeyPair PGP_KEY_PAIR;
 
     public Application() {
-        cryptography = new Cryptography();
+        CRYPTOGRAPHY = new Cryptography();
         System.out.println("Generating PGP key pair...");
-        PGP_KEY_PAIR = cryptography.generateKeyPair();
+        PGP_KEY_PAIR = CRYPTOGRAPHY.generateKeyPair();
     }
 }

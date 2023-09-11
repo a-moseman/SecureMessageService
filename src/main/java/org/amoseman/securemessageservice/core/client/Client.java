@@ -15,17 +15,16 @@ public class Client extends Application {
     }
 
     public void run() {
-        SocketHandler socketHandler =  new SocketHandler(SERVER_ADDRESS, SERVER_PORT);
+        SocketHandler socketHandler =  new SocketHandler(SERVER_ADDRESS, SERVER_PORT, PGP_KEY_PAIR, CRYPTOGRAPHY);
         Thread thread = new Thread(socketHandler);
         thread.start();
-
         Scanner scanner = new Scanner(System.in);
         while (true) {
             String line = scanner.nextLine();
             if (line.equalsIgnoreCase("QUIT")) {
                 break;
             }
-            socketHandler.sendMessage(line);
+            socketHandler.sendMessage(line, true);
         }
     }
 }
