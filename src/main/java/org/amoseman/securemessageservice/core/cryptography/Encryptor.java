@@ -1,11 +1,7 @@
-package org.amoseman.securemessageservice.cryptography;
+package org.amoseman.securemessageservice.core.cryptography;
 
 import org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.openpgp.*;
-import org.bouncycastle.openpgp.operator.bc.BcPGPKeyConverter;
-import org.bouncycastle.openpgp.operator.jcajce.JcePBEKeyEncryptionMethodGenerator;
 import org.bouncycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
 import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
 

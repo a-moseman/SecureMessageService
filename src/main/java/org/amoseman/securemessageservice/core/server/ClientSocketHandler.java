@@ -1,4 +1,4 @@
-package org.amoseman.securemessageservice.server;
+package org.amoseman.securemessageservice.core.server;
 
 import java.io.*;
 import java.net.Socket;

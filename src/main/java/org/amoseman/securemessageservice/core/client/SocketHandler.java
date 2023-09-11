@@ -1,4 +1,4 @@
-package org.amoseman.securemessageservice.client;
+package org.amoseman.securemessageservice.core.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

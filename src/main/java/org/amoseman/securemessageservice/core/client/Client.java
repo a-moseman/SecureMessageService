@@ -1,12 +1,15 @@
-package org.amoseman.securemessageservice.client;
+package org.amoseman.securemessageservice.core.client;
+
+import org.amoseman.securemessageservice.core.Application;
 
 import java.util.Scanner;
 
-public class Client {
+public class Client extends Application {
     private final String SERVER_ADDRESS;
     private final int SERVER_PORT;
 
     public Client(String serverAddress, int serverPort) {
+        super();
         this.SERVER_ADDRESS = serverAddress;
         this.SERVER_PORT = serverPort;
     }

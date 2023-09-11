@@ -1,4 +1,6 @@
-package org.amoseman.securemessageservice.server;
+package org.amoseman.securemessageservice.core.server;
+
+import org.amoseman.securemessageservice.core.Application;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,13 +12,14 @@ import java.util.List;
 /**
  * https://stackoverflow.com/questions/10131377/socket-programming-multiple-client-to-one-server
  */
-public class Server {
+public class Server extends Application {
     private int port;
     private boolean running;
     private List<ClientSocketHandler> clientSocketHandlers;
     private ServerSocket serverSocket;
 
     public Server(int port) {
+        super();
         this.port = port;
     }
 

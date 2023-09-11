@@ -1,6 +1,5 @@
-package org.amoseman.securemessageservice.cryptography;
+package org.amoseman.securemessageservice.core.cryptography;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.*;
 import org.bouncycastle.openpgp.jcajce.JcaPGPObjectFactory;
 import org.bouncycastle.openpgp.operator.PublicKeyDataDecryptorFactory;

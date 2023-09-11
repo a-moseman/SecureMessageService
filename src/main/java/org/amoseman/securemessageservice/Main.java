@@ -1,7 +1,7 @@
 package org.amoseman.securemessageservice;
 
-import org.amoseman.securemessageservice.client.Client;
-import org.amoseman.securemessageservice.server.Server;
+import org.amoseman.securemessageservice.core.client.Client;
+import org.amoseman.securemessageservice.core.server.Server;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,18 +1,12 @@
-package org.amoseman.securemessageservice.cryptography;
+package org.amoseman.securemessageservice.core.cryptography;
 
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
 import org.bouncycastle.openpgp.PGPException;
 import org.bouncycastle.openpgp.PGPKeyPair;
 import org.bouncycastle.openpgp.PGPPrivateKey;
 import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.openpgp.operator.bc.BcPGPKeyConverter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyPair;
-
 
 /**
  * https://stackoverflow.com/questions/35129959/encrypt-decrypt-files-using-bouncy-castle-pgp-in-java
@@ -23,7 +17,7 @@ public class Cryptography {
     private Encryptor encryptor;
     private Decryptor decryptor;
 
-    private Cryptography() {
+    public Cryptography() {
         keyGenerator = new KeyGenerator(BIT_STRENGTH);
         encryptor = new Encryptor();
         decryptor = new Decryptor();
