@@ -1,22 +1,23 @@
 package org.amoseman.securemessageservice;
 
-import org.amoseman.securemessageservice.core.client.Client;
-import org.amoseman.securemessageservice.core.server.Server;
+import org.amoseman.securemessageservice.core.client.SSLClient;
+import org.amoseman.securemessageservice.core.server.SSLServer;
 
 public class Main {
+    //https://www.baeldung.com/java-ssl-handshake-failures
     public static void main(String[] args) {
         String executionType = args[0];
         int serverPort = Integer.parseInt(args[1]);
 
         switch (executionType) {
             case "server":
-                Server server = new Server(serverPort);
-                server.run();
+                SSLServer server = new SSLServer(serverPort);
+                server.start();
                 break;
             case "client":
                 String serverAddress = args[2];
-                Client client = new Client(serverAddress, serverPort);
-                client.run();
+                SSLClient client = new SSLClient(serverPort, serverAddress);
+                client.start();
                 break;
         }
     }

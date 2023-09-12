@@ -1,12 +1,17 @@
 package org.amoseman.securemessageservice.core.cryptography;
 
-import org.bouncycastle.openpgp.PGPException;
-import org.bouncycastle.openpgp.PGPKeyPair;
-import org.bouncycastle.openpgp.PGPPrivateKey;
-import org.bouncycastle.openpgp.PGPPublicKey;
+import org.bouncycastle.bcpg.ArmoredOutputStream;
+import org.bouncycastle.openpgp.*;
+import org.bouncycastle.openpgp.jcajce.JcaPGPPublicKeyRingCollection;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * https://stackoverflow.com/questions/35129959/encrypt-decrypt-files-using-bouncy-castle-pgp-in-java
@@ -33,6 +38,31 @@ public class Cryptography {
 
     public byte[] decryptData(byte[] data, PGPPrivateKey privateKey) throws PGPException, IOException {
         return decryptor.decrypt(data, privateKey);
+    }
+
+    public String encodeAsciiArmorPublicKey(PGPPublicKey publicKey) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ArmoredOutputStream armored = new ArmoredOutputStream(out);
+        publicKey.encode(armored);
+        armored.close();
+        return out.toString(StandardCharsets.US_ASCII);
+    }
+
+    public PGPPublicKey readPublicKey(String string) throws IOException, PGPException {
+        InputStream inputStream = new ByteArrayInputStream(string.getBytes());
+        PGPPublicKeyRingCollection pgpPub = new JcaPGPPublicKeyRingCollection(PGPUtil.getDecoderStream(inputStream));
+        Iterator keyRingIter = pgpPub.getKeyRings();
+        while (keyRingIter.hasNext()) {
+            PGPPublicKeyRing keyRing = (PGPPublicKeyRing) keyRingIter.next();
+            Iterator keyIter = keyRing.getPublicKeys();
+            while (keyIter.hasNext()) {
+                PGPPublicKey key = (PGPPublicKey) keyIter.next();
+                if (key.isEncryptionKey()) {
+                    return key;
+                }
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) throws IOException, PGPException {

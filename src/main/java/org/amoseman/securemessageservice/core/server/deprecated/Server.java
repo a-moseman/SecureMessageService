@@ -1,4 +1,4 @@
-package org.amoseman.securemessageservice.core.server;
+package org.amoseman.securemessageservice.core.server.deprecated;
 
 import org.amoseman.securemessageservice.core.Application;
 
