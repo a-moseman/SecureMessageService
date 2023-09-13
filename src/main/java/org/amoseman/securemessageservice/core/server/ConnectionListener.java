@@ -46,8 +46,8 @@ public class ConnectionListener implements Runnable {
     private PublicKey exchangePublicKeys(Socket socket) throws IOException {
         DataInputStream cIn = new DataInputStream(socket.getInputStream());
         DataOutputStream cOut = new DataOutputStream(socket.getOutputStream());
-        cOut.writeBytes(new String(SERVER_PUBLIC_KEY.getEncoded())); // send the client the server's public key
-        byte[] clientPublicKeyBytes = cIn.readUTF().getBytes(); // receive the client's public key
+        cOut.write(SERVER_PUBLIC_KEY.getEncoded()); // send the client the server's public key
+        byte[] clientPublicKeyBytes = cIn.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH);//cIn.readUTF().getBytes(); // receive the client's public key
         return CRYPTOGRAPHY.readPublicKey(clientPublicKeyBytes);
     }
 }

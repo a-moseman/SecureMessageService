@@ -10,6 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 public class Cryptography {
+    public static int RSA_2408_BIT_KEY_BYTE_LENGTH = 294;
     private final KeyPairGenerator KEY_PAIR_GENERATOR;
 
     public Cryptography() {

@@ -76,8 +76,8 @@ public class Client implements Runnable {
     }
 
     private PublicKey exchangePublicKeys() throws IOException {
-        byte[] serverPublicKeyBytes = INPUT_STREAM.readUTF().getBytes();
-        OUTPUT_STREAM.writeBytes(new String(KEY_PAIR.getPublic().getEncoded()));
+        byte[] serverPublicKeyBytes = INPUT_STREAM.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH);//INPUT_STREAM.readUTF().getBytes();
+        OUTPUT_STREAM.write(KEY_PAIR.getPublic().getEncoded());
         return CRYPTOGRAPHY.readPublicKey(serverPublicKeyBytes);
     }
 }
