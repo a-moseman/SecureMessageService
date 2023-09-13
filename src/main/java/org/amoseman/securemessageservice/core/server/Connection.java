@@ -41,6 +41,7 @@ public class Connection implements Runnable {
             String utf = INPUT_STREAM.readUTF();
             Message message = new Message(getAddress(), utf);
             MESSAGE_QUEUE.add(message);
+            System.out.printf("[INFO] Received message from %s:%d\n", getAddress().getHostAddress(), SOCKET.getPort());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,7 +49,7 @@ public class Connection implements Runnable {
 
     public void sendMessage(String message) {
         try {
-            OUTPUT_STREAM.writeBytes(message);
+            OUTPUT_STREAM.writeUTF(message);
             OUTPUT_STREAM.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

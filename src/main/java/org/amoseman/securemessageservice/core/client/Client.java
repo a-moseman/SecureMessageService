@@ -47,7 +47,7 @@ public class Client implements Runnable {
             while (running) {
                 receiveMessage();
             }
-        });
+        }).start();
         Scanner scanner = new Scanner(USER_INPUT_STREAM);
         while (running) {
             String line = scanner.nextLine();
@@ -57,8 +57,8 @@ public class Client implements Runnable {
 
     private void sendMessage(String message) {
         try {
-            byte[] encryptedData = CRYPTOGRAPHY.encrypt(message.getBytes(), serverPublicKey);
-            OUTPUT_STREAM.writeBytes(Base64.getEncoder().encodeToString(encryptedData));
+            byte[] encryptedData = Base64.getEncoder().encode(CRYPTOGRAPHY.encrypt(message.getBytes(), serverPublicKey));
+            OUTPUT_STREAM.writeUTF(new String(encryptedData));
             OUTPUT_STREAM.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -67,7 +67,7 @@ public class Client implements Runnable {
 
     private void receiveMessage() {
         try {
-            byte[] encryptedData = INPUT_STREAM.readUTF().getBytes();
+            byte[] encryptedData = Base64.getDecoder().decode(INPUT_STREAM.readUTF());
             byte[] decryptedData = CRYPTOGRAPHY.decrypt(encryptedData, KEY_PAIR.getPrivate());
             System.out.println(new String(decryptedData));
         } catch (IOException e) {
@@ -76,7 +76,7 @@ public class Client implements Runnable {
     }
 
     private PublicKey exchangePublicKeys() throws IOException {
-        byte[] serverPublicKeyBytes = INPUT_STREAM.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH);//INPUT_STREAM.readUTF().getBytes();
+        byte[] serverPublicKeyBytes = INPUT_STREAM.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH);
         OUTPUT_STREAM.write(KEY_PAIR.getPublic().getEncoded());
         return CRYPTOGRAPHY.readPublicKey(serverPublicKeyBytes);
     }

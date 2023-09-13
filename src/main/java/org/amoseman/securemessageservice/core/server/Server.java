@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -50,12 +51,13 @@ public class Server implements Runnable {
             return;
         }
         Message message = MESSAGE_QUEUE.remove();
-        byte[] encryptedData = message.MESSAGE.getBytes();
+        byte[] encryptedData = Base64.getDecoder().decode(message.MESSAGE.getBytes());
         byte[] decryptedData = CRYPTOGRAPHY.decrypt(encryptedData, KEY_PAIR.getPrivate());
         for (Connection connection : CONNECTIONS) {
-            byte[] reEncryptedData = CRYPTOGRAPHY.encrypt(decryptedData, connection.CLIENT_PUBLIC_KEY);
+            byte[] reEncryptedData = Base64.getEncoder().encode(CRYPTOGRAPHY.encrypt(decryptedData, connection.CLIENT_PUBLIC_KEY));
             String string = new String(reEncryptedData);
             connection.sendMessage(string);
         }
+        System.out.printf("[INFO] Broadcast message from %s\n", message.SOURCE.getHostAddress());
     }
 }
