@@ -56,11 +56,11 @@ public class Cryptography {
     public byte[] AESEncrypt(byte[] data, SecretKey secretKey) {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            GCMParameterSpec parameterSpec = new GCMParameterSpec(128, cipher.getIV());
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
+            //GCMParameterSpec parameterSpec = new GCMParameterSpec(128, cipher.getIV());
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new SecureRandom());
             return cipher.doFinal(data);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException |
-                 BadPaddingException | InvalidAlgorithmParameterException e) {
+                 BadPaddingException e) {
             throw new RuntimeException(e);
         }
     }
@@ -68,11 +68,11 @@ public class Cryptography {
     public byte[] AESDecrypt(byte[] data, SecretKey secretKey) {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            GCMParameterSpec parameterSpec = new GCMParameterSpec(128, cipher.getIV());
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
+            //GCMParameterSpec parameterSpec = new GCMParameterSpec(128, cipher.getIV());
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new SecureRandom());
             return cipher.doFinal(data);
         } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | BadPaddingException |
-                 InvalidKeyException | InvalidAlgorithmParameterException e) {
+                 InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
