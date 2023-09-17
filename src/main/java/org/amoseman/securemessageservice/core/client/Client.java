@@ -79,12 +79,12 @@ public class Client implements Runnable {
 
     private void handshake() throws IOException {
         // exchange RSA public keys
-        byte[] serverPublicKeyBytes = INPUT_STREAM.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH);
+        byte[] serverPublicKeyBytes = INPUT_STREAM.readNBytes(Cryptography.RSA_PUBLIC_KEY_BYTE_LENGTH);
         OUTPUT_STREAM.write(RSA_KEY_PAIR.getPublic().getEncoded());
         serverRSAPublicKey = CRYPTOGRAPHY.readRSAPublicKey(serverPublicKeyBytes);
         System.out.printf("[INFO] Exchanged RSA public keys with %s:%d\n", SOCKET.getInetAddress().getHostAddress(), SOCKET.getPort());
         // receive AES secret key
-        byte[] encryptedAESSecretKeyBytes = INPUT_STREAM.readUTF().getBytes();
+        byte[] encryptedAESSecretKeyBytes = INPUT_STREAM.readNBytes(512);
         byte[] decryptedAESSecretKeyBytes = CRYPTOGRAPHY.RSADecrypt(encryptedAESSecretKeyBytes, RSA_KEY_PAIR.getPrivate());
         serverAESSecretKey = new SecretKeySpec(decryptedAESSecretKeyBytes, 0, decryptedAESSecretKeyBytes.length, "AES");
         System.out.printf("[INFO] Received AES secret key from %s:%d\n", SOCKET.getInetAddress().getHostAddress(), SOCKET.getPort());

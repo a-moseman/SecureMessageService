@@ -50,14 +50,13 @@ public class ConnectionListener implements Runnable {
         DataInputStream cIn = new DataInputStream(socket.getInputStream());
         DataOutputStream cOut = new DataOutputStream(socket.getOutputStream());
         cOut.write(SERVER_RSA_PUBLIC_KEY.getEncoded()); // send the client the server's public key
-        byte[] clientPublicKeyBytes = cIn.readNBytes(Cryptography.RSA_2408_BIT_KEY_BYTE_LENGTH); // receive the client's public key
+        byte[] clientPublicKeyBytes = cIn.readNBytes(Cryptography.RSA_PUBLIC_KEY_BYTE_LENGTH); // receive the client's public key
         PublicKey clientRSAPublicKey = CRYPTOGRAPHY.readRSAPublicKey(clientPublicKeyBytes);
         System.out.printf("[INFO] Exchanged RSA public keys with %s\n", socket.getInetAddress().getHostAddress());
         // provide AES secret key
         byte[] secretKeyBytes = SERVER_AES_SECRET_KEY.getEncoded();
         byte[] encryptedSecretKeyBytes = CRYPTOGRAPHY.RSAEncrypt(secretKeyBytes, clientRSAPublicKey);
-        String encryptedSecretKeyString = new String(encryptedSecretKeyBytes);
-        cOut.writeUTF(encryptedSecretKeyString);
+        cOut.write(encryptedSecretKeyBytes);
         System.out.printf("[INFO] Sent AES secret key to %s\n", socket.getInetAddress().getHostAddress());
         return clientRSAPublicKey;
     }

@@ -29,6 +29,7 @@ public class Server implements Runnable {
         System.out.print("[INFO] Generated RSA key pair\n");
         AES_SECRET_KEY = CRYPTOGRAPHY.generateAESSecretKey();
         System.out.print("[INFO] Generated AES secret key\n");
+
         try {
             SOCKET = new ServerSocket(port);
         } catch (IOException e) {
